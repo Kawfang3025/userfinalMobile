@@ -33,8 +33,8 @@
         function logout() {
             firebase.auth().signOut().then(function () {
                 ons.notification.alert('See you again soon').then(function(){
-                    localStorage.setItem("email",null);
-                    localStorage.setItem("IDuser",null);
+                    localStorage.clear("email");
+                    localStorage.clear("IDuser");
                     window.location.href = 'login.html';
                    
                 });                

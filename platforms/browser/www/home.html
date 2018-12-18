@@ -80,12 +80,12 @@
                     var vehicleData = vehicleData.data();
                     console.log(vehicleData);
             %>
-                    <ons-card class="bg-light text-dark" style="height:auto;margin-top:;" width="auto">
+                    <ons-card class="bg-light text-dark" onclick="vehicleDetail(`<%= vehicleData.licenseplate %>`);" style="height:auto;margin-top:;" width="auto">
                         <div style="" >
-                        <div><h4><p  style="color:rgb(212, 52, 87);font-weight:bold;text-align: left; margin: 10px;" id="user">
+                        <div><h4><p  style="color:rgb(212, 52, 87);font-weight:bold;text-align: left; margin: 10px;">
                              <%= vehicleData.brand %> - <%= vehicleData.version %>
                               </p></h4></div>
-                              <div><h6> <p style="white-space: initial; width: 90%; text-align: center; margin: 10px;" id="role">
+                              <div><h6> <p style="white-space: initial; width: 90%; text-align: center; margin: 10px;">
                                <%= vehicleData.licenseplate%>
                               </p></h6></div>
                         </div>    
@@ -143,6 +143,7 @@
 </body>
 <script>
     getData();
+    localStorage.clear('license');
     document.addEventListener('init', function (event) {
         var page = event.target;
         // document.getElementById("result").innerHTML = localStorage.getItem("email");
@@ -161,7 +162,6 @@
     function getData() {
         var email = localStorage.getItem("email");
         if (email != null) {
-            console.log(email)
             var data = db.collection("ACCOUNT").where("user", "==", email);
             data.get().then(function (querySnapshot) {
                 var data_template = $('#data_template').html();
@@ -174,7 +174,6 @@
     }
     function vehicleData(id){
         if(id != null ){
-            console.log(id)
             var data = db.collection("USER").where("id", "==", id);
             data.get().then(function (querySnapshot) {
                 var vehicleData_template = $('#vehicleData_template').html();
@@ -187,6 +186,14 @@
         
 
     }
+    function vehicleDetail(license){
+        console.log(license);
+        
+    
+    localStorage.setItem('license',license);
+    window.location.href = 'detail.html';
+        
+    } 
 </script>
 
 </html>

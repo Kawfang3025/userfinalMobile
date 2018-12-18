@@ -108,6 +108,8 @@
             if (user) {
                 // User is signed in.
                 // Send user to home.html
+                
+                localStorage.setItem("email",email);
                 window.location.href = 'home.html';
             }
         });
