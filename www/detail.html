@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=K2D" rel="stylesheet">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+    <script src="ejs.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-firestore.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyCBtLipcPW51VoDUichCy69DM1oCe5uWeg",
+            authDomain: "userapp-6784a.firebaseapp.com",
+            databaseURL: "https://userapp-6784a.firebaseio.com",
+            projectId: "userapp-6784a",
+            storageBucket: "userapp-6784a.appspot.com",
+            messagingSenderId: "931991875090"
+        };
+        firebase.initializeApp(config);
+        // Initialize Cloud Firestore through Firebase
+        var db = firebase.firestore();
+        // Disable deprecated features
+        db.settings({
+            timestampsInSnapshots: true
+        });
+    </script>
+    <link href="https://fonts.googleapis.com/css?family=K2D" rel="stylesheet">
+    </link>
+    <style>
+        .toolbaricon {
+            padding-left: 5px;
+            padding-bottom: 5px;
+            padding-right: 5px;
+            color: rgb(0, 165, 27);
+            
+        }
+        
+
+        * {
+            font-family: 'Sniglet', cursive;
+        }
+    </style>
+
+</head>
+
+<body>
+ 
+
+</body>
+<script>
+    getData();
+    document.addEventListener('init', function (event) {
+        var page = event.target;
+        // document.getElementById("result").innerHTML = localStorage.getItem("email");
+
+        if (page.id === 'firstpage') {
+            page.querySelector('#push-button').onclick = function () {
+                getData();
+                document.querySelector('#myNavigator').pushPage('regist.html', { data: { title: 'Regist' } });
+            };
+        } else if (page.id === 'regist') {
+            page.querySelector('ons-toolbar .center').innerHTML = page.data.title;
+        }
+    });
+
+
+    function getData() {
+        var email = localStorage.getItem("email");
+        if (email != null) {
+            var data = db.collection("ACCOUNT").where("user", "==", email);
+            data.get().then(function (querySnapshot) {
+                var data_template = $('#data_template').html();
+                var html = ejs.render(data_template, { data: querySnapshot.docs }); 
+                $('#data').html(html);
+                var id = localStorage.getItem("IDuser");
+                vehicleData(id);
+            });
+        }
+    }
+    function vehicleData(id){
+        if(id != null ){
+            var data = db.collection("USER").where("id", "==", id);
+            data.get().then(function (querySnapshot) {
+                var vehicleData_template = $('#vehicleData_template').html();
+                var html = ejs.render(vehicleData_template, { vehicleData: querySnapshot.docs }); 
+                $('#vehicleData').html(html);              
+            });
+
+        }
+       
+        
+
+    }
+</script>
+
+</html>

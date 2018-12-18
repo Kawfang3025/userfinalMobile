@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase.js"></script>
+    <script src="cordova.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyCBtLipcPW51VoDUichCy69DM1oCe5uWeg",
+            authDomain: "userapp-6784a.firebaseapp.com"
+        };
+        firebase.initializeApp(config);
+    </script>
+</head>
+
+<body>
+
+    <ons-page>
+        <ons-toolbar class="bg-dark">
+            </div>
+            <div class="center text-light" id="appname">PSU VEHICLE REGISTRATION</div>
+            </div>
+        </ons-toolbar>
+        <ons-tabbar swipeable position="auto" id="tabbar">
+            <ons-tab class="bg-light" page="login.html" label="Sign In" icon="md-assignment-account"
+                active>
+            </ons-tab>
+            <ons-tab class="bg-light" page="register.html" label="Sign Up" icon="md-edit" active-icon="md-edit">
+            </ons-tab>
+        </ons-tabbar>
+    </ons-page>
+    <template id="login.html">
+        <ons-page id="logintab">
+            <div style="text-align: center; margin-top: 30px;">
+                    <h3>Login</h3>
+                <p>
+                    <ons-input id="username" modifier="underbar" placeholder="Username" float></ons-input>
+                </p>
+                <p>
+                    <ons-input id="password" modifier="underbar" type="password" placeholder="Password" float></ons-input>
+                </p>
+                <p style="margin-top: 30px;">
+                    <ons-button class="btn-md" style="width:70%" onclick="login()">Sign In</ons-button>
+                </p>
+            </div>
+            
+
+        </ons-page>
+    </template>
+    <template id="register.html">
+        <ons-page id="registab">
+            <div style="text-align: center; margin-top: 30px;">
+                <h3>Register new user</h3>
+                <p>
+                    <ons-input id="username1" modifier="underbar" placeholder="Username" float></ons-input>
+                </p>
+                <p>
+                    <ons-input id="password1" modifier="underbar" type="password" placeholder="Password" float></ons-input>
+                </p>
+                <p style="margin-top: 30px;">
+                    <ons-button onclick="register()">Sign Up for New User</ons-button>
+                    <script>
+                        function register() {
+                            var username1 = document.getElementById('username1').value;
+                            var password1 = document.getElementById('password1').value;
+                            firebase.auth().createUserWithEmailAndPassword(username1, password1).catch(function (error) {
+                                // Handle Errors here.
+                                var errorCode = error.code;
+                                var errorMessage = error.message;
+                                ons.notification.alert(errorCode + ':' + errorMessage);
+                            });
+                        }
+
+                        firebase.auth().onAuthStateChanged(function (user) {
+                            if (user) {
+                                // User is signed in.
+                                // Send user to home.html
+                                window.location.href = 'home.html';
+                            }
+                        });
+                    </script>
+        </ons-page>
+    </template>
+
+    <script>
+
+        var login = function () {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            firebase.auth().signInWithEmailAndPassword(username, password).catch(function (error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log(error.code + ':' + error.message);
+                ons.notification.alert('Login failed');
+            });
+        };
+
+        firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                // User is signed in.
+                // Send user to home.html
+                localStorage.clear("email")
+                localStorage.setItem("email",email);
+                window.location.href = 'home.html';
+            }
+        });
+    //     document.addEventListener('prechange', function (event) {
+    //     document.querySelector('ons-toolbar.center').innerHTML = event.tabItem.getAttribute('label');
+    // });
+    </script>
+</body>
+
+
+</html>
