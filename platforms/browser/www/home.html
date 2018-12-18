@@ -56,7 +56,7 @@
 
     <template id="firstpage.html">
         <ons-page id="firstpage">
-            <ons-toolbar style="background-color: rgb(250, 182, 56)">
+            <ons-toolbar style="background-color: rgb(56, 117, 250)">
                 <div class="center">Home</div>
             </ons-toolbar>
             <!-- show vehicle -->
@@ -74,14 +74,13 @@
 
             </script>
             <div class="container-fluid" id="vehicleData"></div>
-            
+
             <script id="vehicleData_template" type="text/template">
                 <% vehicleData.forEach(function(vehicleData){
                     var vehicleData = vehicleData.data();
                     console.log(vehicleData);
             %>
-                    <ons-card class="bg-light text-dark" onclick="vehicleDetail(`<%= vehicleData.licenseplate %>`);" style="height:auto;margin-top:;" width="auto">
-                        <div style="" >
+                    <ons-card class="bg-light text-dark" onclick="vehicleDetail(`<%= vehicleData.licenseplate %>`);" style="height:auto;margin-top:5%;" width="auto">
                         <div><h4><p  style="color:rgb(212, 52, 87);font-weight:bold;text-align: left; margin: 10px;">
                              <%= vehicleData.brand %> - <%= vehicleData.version %>
                               </p></h4></div>
@@ -97,12 +96,16 @@
     </script>
 
 
-            <p style="text-align: center; margin: 10px;">
+            <p style="text-align: center; margin: 3%; ">
                 <ons-button id="push-button" modifier="large" class="button button--large icon=" fa-id-card-o"><b><i
-                            class="fa fa-plus-circle"></i>&nbsp; Add
-                        new vehicle </i></b>
+                            class="fa fa-plus-circle"></i>&nbsp; Add new vehicle </i></b>
                 </ons-button>
             </p>
+            <div style="text-align: center; margin: 3%;">
+                <img onclick="logout()" style="width:20%;" src="https://firebasestorage.googleapis.com/v0/b/userapp-6784a.appspot.com/o/exit.png?alt=media&token=eb6e2d36-3ea0-4466-a1d8-eac715c6c50f">
+                Logout
+            </div>
+
         </ons-page>
     </template>
 
@@ -117,24 +120,48 @@
 
             <p style="text-align: center; margin: 20px;">
                 <ons-icon class="toolbaricon" size="5px" icon="fa-user-circle">
-                    &nbsp;<input type="text" class="text-input text-input--underbar" placeholder="Name" value="">
+                    &nbsp;<input type="text" class="text-input text-input--underbar" id="name" placeholder="Name">
                 </ons-icon><br><br>
                 <ons-icon class="toolbaricon" size="5px" icon="fa-user-o">
-                    &nbsp;&nbsp;<input type="text" class="text-input text-input--underbar" placeholder="Surname" value=""></ons-icon>
+                    &nbsp;&nbsp;<input type="text" class="text-input text-input--underbar" id="surname" placeholder="Surname"
+                        value=""></ons-icon>
                 <br><br>
                 <ons-icon class="toolbaricon" size="5px" icon="fa-id-card-o">
-                    &nbsp;&nbsp;<input type="text" class="text-input text-input--underbar" placeholder="Position" value=""></ons-icon>
+                    &nbsp;&nbsp;<input type="text" class="text-input text-input--underbar" id="position" placeholder="Position"
+                        value=""></ons-icon>
                 <br><br>
                 <ons-icon class="toolbaricon" size="5px" icon="fa-credit-card">
-                    &nbsp;&nbsp;<input type="text" class="text-input text-input--underbar" placeholder="License plate"
+                    &nbsp;&nbsp;<input type="text" class="text-input text-input--underbar" id="license" placeholder="License plate"
                         value=""></ons-icon>
                 <br><br>
                 <ons-icon class="toolbaricon" size="5px" icon="fa-car">
-                    &nbsp;&nbsp;<input type="text" class="text-input text-input--underbar" placeholder="Brand" value=""></ons-icon>
+                    &nbsp;&nbsp;<input type="text" class="text-input text-input--underbar" id="brand" placeholder="Brand"
+                        value=""></ons-icon>
                 <br><br>
                 <ons-icon class="toolbaricon" size="5px" icon="fa-tachometer">
-                    &nbsp;&nbsp;<input type="text" class="text-input text-input--underbar" placeholder="Color" value=""></ons-icon>
+                    &nbsp;&nbsp;<input type="text" class="text-input text-input--underbar" id="color" placeholder="Color"
+                        value=""></ons-icon>
                 <br><br>
+                <ons-icon class="toolbaricon" size="5px" icon="fa-image">&nbsp;Front
+                    &nbsp;&nbsp;<input type="file" class="form-control-file" id="imagefront" placeholder="Image front"
+                        aria-describedby="fileHelpId">
+                </ons-icon>
+                <br><br>
+                <ons-icon class="toolbaricon" size="5px" icon="fa-image">&nbsp;Inside
+                    &nbsp;&nbsp;<input type="file" class="form-control-file" id="imageside" placeholder="Image side"
+                        aria-describedby="fileHelpId">
+                </ons-icon>
+                <br><br>
+                <ons-icon class="toolbaricon" size="5px" icon="fa-image">&nbsp;Behind
+                    &nbsp;&nbsp;<input type="file" class="form-control-file" id="imagebehide" placeholder="Image behide"
+                        aria-describedby="fileHelpId">
+                </ons-icon>
+                <br><br>
+                <p style="text-align: center; margin: 3%; ">
+                    <ons-button modifier="large" onclick="adddata(name.value,surname.value,position.value,license.value,brand.value,color.value,imagefront.value,imageside.value,imagebehide.value);" class="button button--large icon=" fa-id-card-o"><b><i
+                                class="fa fa-plus"></i>&nbsp; Add vehicle data </i></b>
+                    </ons-button>
+                </p>
 
             </p>
         </ons-page>
@@ -142,7 +169,10 @@
 
 </body>
 <script>
+
+    var email = localStorage.getItem("email");
     getData();
+
     localStorage.clear('license');
     document.addEventListener('init', function (event) {
         var page = event.target;
@@ -160,40 +190,50 @@
 
 
     function getData() {
-        var email = localStorage.getItem("email");
+
+        console.log(email);
+
         if (email != null) {
             var data = db.collection("ACCOUNT").where("user", "==", email);
             data.get().then(function (querySnapshot) {
                 var data_template = $('#data_template').html();
-                var html = ejs.render(data_template, { data: querySnapshot.docs }); 
+                var html = ejs.render(data_template, { data: querySnapshot.docs });
                 $('#data').html(html);
                 var id = localStorage.getItem("IDuser");
                 vehicleData(id);
             });
         }
     }
-    function vehicleData(id){
-        if(id != null ){
+    function vehicleData(id) {
+        if (id != null) {
             var data = db.collection("USER").where("id", "==", id);
             data.get().then(function (querySnapshot) {
                 var vehicleData_template = $('#vehicleData_template').html();
-                var html = ejs.render(vehicleData_template, { vehicleData: querySnapshot.docs }); 
-                $('#vehicleData').html(html);              
+                var html = ejs.render(vehicleData_template, { vehicleData: querySnapshot.docs });
+                $('#vehicleData').html(html);
             });
 
         }
-       
-        
+
+
 
     }
-    function vehicleDetail(license){
+    function vehicleDetail(license) {
         console.log(license);
+
+
+        localStorage.setItem('license', license);
+        window.location.href = 'detail.html';
+
+    }
+    function logout() {
+        window.location.href = "logout.html"
+    }
+
+    function adddata(name,surname,position,license,brand,color,imagefront,imageside,imagebehide){
+        console.log(name,surname,position,license,brand,color,imagefront,imageside,imagebehide);
         
-    
-    localStorage.setItem('license',license);
-    window.location.href = 'detail.html';
-        
-    } 
+    }
 </script>
 
 </html>

@@ -17,9 +17,8 @@
     };
     firebase.initializeApp(config);
     firebase.auth().onAuthStateChanged(function (user) {
+      var email = user.email;
       if (user) {
-        var email = user.email;
-        localStorage.clear("email")
         localStorage.setItem("email",email);
         // User is signed in.
         // Send user to home.html

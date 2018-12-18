@@ -39,7 +39,7 @@
             padding-left: 5px;
             padding-bottom: 5px;
             padding-right: 5px;
-            color: rgb(0, 165, 27);
+            color: rgb(255, 235, 119);
             
         }
         
@@ -53,9 +53,10 @@
 
 <body>
     
-        <ons-toolbar style="background-color: rgb(250, 182, 56)">
+        <ons-toolbar style="background-color: rgb(56, 117, 250)">
                 <div class="left">
-                    <ons-back-button >Home</ons-back-button>
+                    <ons-back-button  onclick="back()" > <ons-icon class="toolbaricon" size="30%" icon="fa-backward">
+                        </ons-icon></ons-back-button>
                 </div>
                 <div id="tool" class="center"></div>
             </ons-toolbar>
@@ -65,19 +66,19 @@
                     var data = data.data();
                     console.log(data);
             %>
-            <div ><img class="center" style="text-align:center;margin:2%;max-height:50%;max-width: 99%;" src="<%= data.qr %>"> </div>
-            <div><h6> <p style="white-space: initial; width: 90%; text-align: center; margin: 10px;">
+            <br><br>
+            <div><img class="center" style="text-align:center;margin-top:15%;margin-left:20%;margin-right:20%;max-height:50%;max-width: 99%;" src="<%= data.qr %>"></div>
+            <br><div class="card" style="color:rgb(56, 117, 250);"><div><h5> <p style="white-space: initial; width: 90%; text-align: center; margin: 5px; color:#9933ff;font-weight:bold;">
                     <%= data.licenseplate%>
-            </p></h6></div>
-            <div><h6> <p style="white-space: initial; width: 90%; text-align: center; margin: 10px;">
-                    Brand: <%= data.brand%>  ( <%= data.version%> )
-            </p></h6></div>
-            <div><h6> <p style="white-space: initial; width: 90%; text-align: center; margin: 10px;">
-                   Name: <%= data.name%> <%= data.surname%> 
-            </p></h6></div>
-            <div><h6> <p style="white-space: initial; width: 90%; text-align: center; margin: 10px;">
-                    Position: <%= data.position%>
-            </p></h6></div>
+            </p></h5></div>
+            <div><h5> <p style="white-space: initial; width: 90%; text-align: center; margin: 5px;">
+                    <b>Brand:</b> <%= data.brand%>  ( <%= data.version%> )
+            </p></h5></div>
+            <div><h5> <p style="white-space: initial; width: 90%; text-align: center; margin: 5px;">
+                  <b> Name:</b> <%= data.name%> <%= data.surname%> </h5></div>
+            <div><h5> <p style="white-space: initial; width: 90%; text-align: center; margin: 5px;">
+                    <b> Position: </b> <%= data.position%>
+            </p></h5></div></div>
             
         <%});%>      
         
@@ -97,6 +98,9 @@ function showdetail() {
         var html = ejs.render(detail_template, { data: querySnapshot.docs });
             $('#detail').html(html);
         })
+    }
+    function back(){
+        window.location.href = "index.html"
     }
 </script>
 
