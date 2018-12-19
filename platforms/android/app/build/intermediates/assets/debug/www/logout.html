@@ -12,17 +12,22 @@
     <script>
         // Initialize Firebase
         var config = {
-            apiKey: "AIzaSyCBtLipcPW51VoDUichCy69DM1oCe5uWeg",
-            authDomain: "userapp-6784a.firebaseapp.com"
+        apiKey: "AIzaSyCBtLipcPW51VoDUichCy69DM1oCe5uWeg",
+        authDomain: "userapp-6784a.firebaseapp.com"
         };
         firebase.initializeApp(config);
 
     </script>
-   
+    <style>
+        body{
+                background-color: burlywood;
+        }
+    </style>
+
 </head>
 
-<body style=" background-color: rgb(22, 188, 190);">
-    <ons-page ">
+<body;>
+    <ons-page>
         <div style="text-align: center; width: auto; height: auto;">
             <p style="margin-top: 30px;">
                 <ons-button onclick="logout()">Sign Out</ons-button>
@@ -33,10 +38,8 @@
         function logout() {
             firebase.auth().signOut().then(function () {
                 ons.notification.alert('See you again soon').then(function(){
-                    localStorage.clear("email");
-                    localStorage.clear("IDuser");
                     window.location.href = 'login.html';
-                   
+                    localStorage.clear("IDuser")
                 });                
             }).catch(function (error) {
                 // An error happened.

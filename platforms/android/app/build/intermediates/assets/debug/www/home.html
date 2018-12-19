@@ -11,9 +11,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
         crossorigin="anonymous"></script>
     <script src="ejs.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.5.0/firebase.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase.js"></script>
     <script>
         // Initialize Firebase
         var config = {
@@ -39,7 +37,7 @@
             padding-left: 5px;
             padding-bottom: 5px;
             padding-right: 5px;
-            color: rgb(0, 165, 27);
+            color: rgb(250, 56, 98);
             
         }
         
@@ -56,12 +54,12 @@
 
     <template id="firstpage.html">
         <ons-page id="firstpage">
-            <ons-toolbar style="background-color: rgb(56, 117, 250)">
-                <div class="center">Home</div>
+            <ons-toolbar style="background-color: rgb(0, 53, 167)">
+                <div class="center" style="color:rgb(255, 255, 255);">Home</div>
             </ons-toolbar>
             <!-- show vehicle -->
-            </div>
-            <div class="container-fluid" id="data"></div>
+            </div><br>
+            <div class="container-fluid" id="data"><b></b></div>
             <script id="data_template" type="text/template">
                     <% data.forEach(function(data){
                         var data = data.data();
@@ -97,7 +95,7 @@
 
 
             <p style="text-align: center; margin: 3%; ">
-                <ons-button id="push-button" modifier="large" class="button button--large icon=" fa-id-card-o"><b><i
+                <ons-button id="push-button" modifier="large" class="button button--large icon=" fa-id-card-o" style="background-color: rgb(248, 182, 0)"><b><i
                             class="fa fa-plus-circle"></i>&nbsp; Add new vehicle </i></b>
                 </ons-button>
             </p>
@@ -111,16 +109,16 @@
 
     <template id="regist.html">
         <ons-page id="regist">
-            <ons-toolbar style="background-color: rgb(250, 182, 56)">
+            <ons-toolbar style="background-color: rgb(0, 53, 167)">
                 <div class="left">
-                    <ons-back-button>Home</ons-back-button>
+                    <ons-back-button style="color:rgb(255, 255, 255);">Home</ons-back-button>
                 </div>
-                <div class="center"></div>
+                <div class="center" style="color:rgb(255, 255, 255);" style="color:rgb(255, 255, 255);"></div>
             </ons-toolbar>
 
             <p style="text-align: center; margin: 20px;">
                 <ons-icon class="toolbaricon" size="5px" icon="fa-user-circle">
-                    &nbsp;<input type="text" class="text-input text-input--underbar" id="name" placeholder="Name">
+                    &nbsp;<input type="text" class="text-input text-input--underbar" id="Fname" placeholder="Name">
                 </ons-icon><br><br>
                 <ons-icon class="toolbaricon" size="5px" icon="fa-user-o">
                     &nbsp;&nbsp;<input type="text" class="text-input text-input--underbar" id="surname" placeholder="Surname"
@@ -136,6 +134,10 @@
                 <br><br>
                 <ons-icon class="toolbaricon" size="5px" icon="fa-car">
                     &nbsp;&nbsp;<input type="text" class="text-input text-input--underbar" id="brand" placeholder="Brand"
+                        value=""></ons-icon>
+                <br><br>
+                <ons-icon class="toolbaricon" size="5px" icon="fa-bus">
+                    &nbsp;&nbsp;<input type="text" class="text-input text-input--underbar" id="version" placeholder="Version"
                         value=""></ons-icon>
                 <br><br>
                 <ons-icon class="toolbaricon" size="5px" icon="fa-tachometer">
@@ -158,7 +160,8 @@
                 </ons-icon>
                 <br><br>
                 <p style="text-align: center; margin: 3%; ">
-                    <ons-button modifier="large" onclick="adddata(name.value,surname.value,position.value,license.value,brand.value,color.value,imagefront.value,imageside.value,imagebehide.value);" class="button button--large icon=" fa-id-card-o"><b><i
+                    <ons-button modifier="large" onclick="adddata( Fname.value , surname.value,position.value,license.value,brand.value,color.value,imagefront.files[0],imageside.files[0],imagebehide.files[0],version.value);"
+                        style="background-color: rgb(248, 182, 0)" class="button button--large icon=" fa-id-card-o"><b><i
                                 class="fa fa-plus"></i>&nbsp; Add vehicle data </i></b>
                     </ons-button>
                 </p>
@@ -171,6 +174,7 @@
 <script>
 
     var email = localStorage.getItem("email");
+    var id;
     getData();
 
     localStorage.clear('license');
@@ -199,7 +203,7 @@
                 var data_template = $('#data_template').html();
                 var html = ejs.render(data_template, { data: querySnapshot.docs });
                 $('#data').html(html);
-                var id = localStorage.getItem("IDuser");
+                id = localStorage.getItem("IDuser");
                 vehicleData(id);
             });
         }
@@ -230,10 +234,78 @@
         window.location.href = "logout.html"
     }
 
-    function adddata(name,surname,position,license,brand,color,imagefront,imageside,imagebehide){
-        console.log(name,surname,position,license,brand,color,imagefront,imageside,imagebehide);
-        
+    var img1 ="";
+    var img2 ="";
+    var img3 ="";
+    var storage = firebase.storage();
+    function adddata(name, surname, position, license, brand, color, imagefront, imageside, imagebehide, version) {
+    
+        console.log(name, surname, position, license, brand, color, imagefront, imageside, imagebehide);
+        var file = document.getElementById("imagefront").files[0];
+        console.log(file);
+        var file1 = document.getElementById("imageside").files[0];
+        console.log(file1);
+        var file2 = document.getElementById("imagebehide").files[0];
+        console.log(file2);
+
+        var storageRef = firebase.storage().ref();
+        var picRef1 = storageRef.child( file.name);
+        console.log(picRef1);
+
+        var picRef2 = storageRef.child(file1.name);
+        console.log(picRef2);
+
+        var picRef3 = storageRef.child(file2.name);
+        console.log(picRef3);
+
+        picRef1.put(file).then(function (snapshot) {
+            console.log('Already put');
+            picRef1.getDownloadURL().then(function (url) {
+                
+                img1 = url
+                console.log(img1);
+            })
+            });
+        picRef2.put(file1).then(function (snapshot) {
+            console.log('Already put');
+            picRef2.getDownloadURL().then(function (url) {
+                
+                img2 = url
+                console.log(img2);
+            })
+        });
+        picRef3.put(file2).then(function (snapshot) {
+            console.log('Already put');
+            picRef3.getDownloadURL().then(function (url) {
+                
+                img3 = url
+                console.log(img3);
+                var datasend = JSON.parse('{ "id":"' + id + '","brand":"' + brand + '","color":"' + color + '","name":"' + name + '","surname":"' + surname + '","position":"' + position + '","version":"' + version + '","licenseplate":"' + license + '","inside":"' + img2 + '","front":"' + img1 + '","back":"' + img3 + '"}');
+                add(datasend)
+            });
+        });
+
+
     }
+    function back() {
+        window.location.href = "index.html"
+    }
+    function add(datasend){
+        console.log(datasend);
+        db.collection("USER").add(datasend)
+            .then(function (docRef) {
+                console.log("Document written with ID: ", docRef.id);
+                alert('Add Data Already')
+                window.location.href = "index.html"
+            })
+            .catch(function (error) {
+                console.error("Error adding document: ", error);
+            });
+            
+
+    }
+
+    
 </script>
 
 </html>

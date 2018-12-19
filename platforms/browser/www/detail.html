@@ -39,7 +39,7 @@
             padding-left: 5px;
             padding-bottom: 5px;
             padding-right: 5px;
-            color: rgb(255, 235, 119);
+            color: rgb(255, 250, 225);
             
         }
         
@@ -52,16 +52,16 @@
 </head>
 
 <body>
-    
-        <ons-toolbar style="background-color: rgb(56, 117, 250)">
-                <div class="left">
-                    <ons-back-button  onclick="back()" > <ons-icon class="toolbaricon" size="30%" icon="fa-backward">
-                        </ons-icon></ons-back-button>
-                </div>
-                <div id="tool" class="center"></div>
-            </ons-toolbar>
-        <div class="container-fluid" id="detail"></div>
-        <script id="detail_template" type="text/template">
+
+    <ons-toolbar style="background-color: rgb(0, 53, 167)">
+        <div class="left">
+            <ons-icon class="toolbaricon" onclick="back()" size="20px" icon="fa-backward">
+            </ons-icon>
+        </div>
+        <div id="tool" class="center" style="color:rgb(255, 255, 255);"></div>
+    </ons-toolbar>
+    <div class="container-fluid" id="detail"></div>
+    <script id="detail_template" type="text/template">
                 <% data.forEach(function(data){
                     var data = data.data();
                     console.log(data);
@@ -86,20 +86,20 @@
 
 </body>
 <script>
-    
+
     var license = localStorage.getItem('license');
     document.getElementById("tool").innerHTML = license;
     showdetail();
-function showdetail() {
+    function showdetail() {
         console.log(license);
         var detailRef = db.collection("USER").where("licenseplate", "==", license);
         detailRef.get().then(function (querySnapshot) {
-        var detail_template = $('#detail_template').html();
-        var html = ejs.render(detail_template, { data: querySnapshot.docs });
+            var detail_template = $('#detail_template').html();
+            var html = ejs.render(detail_template, { data: querySnapshot.docs });
             $('#detail').html(html);
         })
     }
-    function back(){
+    function back() {
         window.location.href = "index.html"
     }
 </script>
