@@ -234,12 +234,12 @@
         window.location.href = "logout.html"
     }
 
-    var img1 ="";
-    var img2 ="";
-    var img3 ="";
+    var img1 = "";
+    var img2 = "";
+    var img3 = "";
     var storage = firebase.storage();
     function adddata(name, surname, position, license, brand, color, imagefront, imageside, imagebehide, version) {
-    
+
         console.log(name, surname, position, license, brand, color, imagefront, imageside, imagebehide);
         var file = document.getElementById("imagefront").files[0];
         console.log(file);
@@ -249,7 +249,7 @@
         console.log(file2);
 
         var storageRef = firebase.storage().ref();
-        var picRef1 = storageRef.child( file.name);
+        var picRef1 = storageRef.child(file.name);
         console.log(picRef1);
 
         var picRef2 = storageRef.child(file1.name);
@@ -261,36 +261,39 @@
         picRef1.put(file).then(function (snapshot) {
             console.log('Already put');
             picRef1.getDownloadURL().then(function (url) {
-                
                 img1 = url
                 console.log(img1);
-            })
-            });
-        picRef2.put(file1).then(function (snapshot) {
-            console.log('Already put');
-            picRef2.getDownloadURL().then(function (url) {
-                
-                img2 = url
-                console.log(img2);
+                picRef2.put(file1).then(function (snapshot) {
+                    console.log('Already put');
+                    picRef2.getDownloadURL().then(function (url) {
+
+                        img2 = url
+                        console.log(img2);
+                        picRef3.put(file2).then(function (snapshot) {
+                            console.log('Already put');
+                            picRef3.getDownloadURL().then(function (url) {
+
+                                img3 = url
+                                console.log(img3);
+                                var datasend = JSON.parse('{ "id":"' + id + '","brand":"' + brand + '","color":"' + color + '","name":"' + name + '","surname":"' + surname + '","position":"' + position + '","version":"' + version + '","licenseplate":"' + license + '","inside":"' + img2 + '","front":"' + img1 + '","back":"' + img3 + '"}');
+                                add(datasend)
+                           
+                            });
+                        });
+                    })
+                });
             })
         });
-        picRef3.put(file2).then(function (snapshot) {
-            console.log('Already put');
-            picRef3.getDownloadURL().then(function (url) {
-                
-                img3 = url
-                console.log(img3);
-                var datasend = JSON.parse('{ "id":"' + id + '","brand":"' + brand + '","color":"' + color + '","name":"' + name + '","surname":"' + surname + '","position":"' + position + '","version":"' + version + '","licenseplate":"' + license + '","inside":"' + img2 + '","front":"' + img1 + '","back":"' + img3 + '"}');
-                add(datasend)
-            });
-        });
+
+
+        
 
 
     }
     function back() {
         window.location.href = "index.html"
     }
-    function add(datasend){
+    function add(datasend) {
         console.log(datasend);
         db.collection("USER").add(datasend)
             .then(function (docRef) {
@@ -301,11 +304,11 @@
             .catch(function (error) {
                 console.error("Error adding document: ", error);
             });
-            
+
 
     }
 
-    
+
 </script>
 
 </html>
